@@ -9,16 +9,24 @@ app.use(express.json({
     verify: (req, res, buf) => {
         req.rawBody = buf;
     }
-}))
+}));
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-    res.send("Hello");
+    res.send("Hello World");
 });
 
 app.post("/github/webhook", (req, res) => {
     const event = req.headers["x-github-event"];
 
     console.log("📩 Event:", event);
+    console.log("Content-Type:", req.headers["content-type"]);
+    console.log(req.body);
+    if (!req.body || Object.keys(req.body).length === 0) {
+        return res.status(400).json({
+            error: "Request body is empty or unsupported content-type."
+        });
+    }
 
     if (event === "pull_request") {
         const action = req.body.action;
