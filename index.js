@@ -26,7 +26,7 @@ app.post("/github/webhook", (req, res) => {
         const repo = req.body.repository.full_name;
 
         if (["opened", "synchronize", "reopened"].includes(action)) {
-            console.log("🚀 PR detected");
+            console.log("PR detected");
             console.log("Repo:", repo);
             console.log("PR #:", pr.number);
             console.log("Title:", pr.title);
